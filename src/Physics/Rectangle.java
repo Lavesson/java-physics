@@ -1,10 +1,10 @@
 package Physics;
 
 public class Rectangle {
-    public final float x;
-    public final float y;
-    public final float width;
-    public final float height;
+    public float x;
+    public float y;
+    public float width;
+    public float height;
 
     // x: upper left corner
     // y: upper right corner

@@ -2,6 +2,7 @@ package Physics;
 
 import Rendering.RenderPanel;
 import javax.swing.*;
+import java.awt.image.BufferStrategy;
 
 public class Main {
     public static final int WIDTH = 1280;
@@ -15,8 +16,10 @@ public class Main {
         mainWindow.setSize(WIDTH, HEIGHT);
         mainWindow.setVisible(true);
         mainWindow.setLocationRelativeTo(null);
+        mainWindow.setIgnoreRepaint(true);
+        mainWindow.createBufferStrategy(2);
 
-        RenderPanel renderPanel = new RenderPanel(new PhysicsEngine());
+        RenderPanel renderPanel = new RenderPanel(new PhysicsEngine(), mainWindow.getBufferStrategy());
         mainWindow.add(renderPanel);
     }
 }

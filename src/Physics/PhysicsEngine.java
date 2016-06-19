@@ -9,7 +9,7 @@ import java.util.List;
 
 public class PhysicsEngine {
     private List<Body> bodies = new ArrayList<Body>();
-    private float gravity = -9.82f;
+    private float gravity = 9.82f;
 
     public void add(Body body) {
         bodies.add(body);
@@ -19,12 +19,22 @@ public class PhysicsEngine {
         return new ArrayList<Body>(bodies);
     }
 
-    // dt: The time delta to step the simulation forward with
+    // dt: The time delta to step the simulation forward with. Expressed in seconds
     public void step(double dt) {
         for (Body b : bodies) {
             if (!b.hasGravity) continue;
 
-            //
+            // We'll start by just applying some simple gravity in y
+
+            // Current velocity:
+            float v0 = b.velocity.y;
+
+            // Calculate the new velocity for this frame:
+            b.velocity.y = (float) (v0 + gravity * dt);
+
+            // Calculate the distance that we've moved in this frame:
+            float s = (float) (v0*dt + 0.5f * gravity * dt * dt);
+            b.occupiedArea.y += s;
         }
     }
 }
