@@ -33,6 +33,9 @@ public class RenderPanel extends JPanel implements MouseInputListener {
 
         Graphics2D g2d = (Graphics2D)g;
 
+        // Render all bodies in the physics engine. Notice that NOTHING in this class
+        // actually knows anything about physics. It just draws whatever the engine
+        // feeds it.
         for (Body b : engine.getAllBodies()) {
             Physics.Rectangle rect = b.occupiedArea;
 
