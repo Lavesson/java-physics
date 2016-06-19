@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
+import java.util.Random;
 
 public class RenderPanel extends JPanel implements MouseInputListener {
     private final PhysicsEngine engine;
@@ -17,12 +18,9 @@ public class RenderPanel extends JPanel implements MouseInputListener {
     public RenderPanel(PhysicsEngine engine) {
         this.engine = engine;
         addMouseListener(this);
-        setupEngine();
-    }
 
-    private void setupEngine() {
-        // Let's assume all units are in centimeters
-        Body ground = new Body(new Rectangle(0, 400, 500, 100));
+        // Add a ground "box" to the engine
+        Body ground = new Body(new Rectangle(0, 760, 1280, 200));
         ground.hasGravity = false;
         engine.add(ground);
     }
@@ -49,7 +47,10 @@ public class RenderPanel extends JPanel implements MouseInputListener {
 
     // Unused crap that the interface bloats our class with:
     @Override public void mousePressed(MouseEvent e) {
-        engine.add(new Body(Rectangle.fromCenter(e.getX(), e.getY(), 30, 30)));
+        Random r = new Random();
+        // Generate a random width and height between 30 and 80
+        int w = r.nextInt(51) + 30, h = r.nextInt(51) + 30;
+        engine.add(new Body(Rectangle.fromCenter(e.getX(), e.getY(), w, h)));
         repaint();
     }
     @Override public void mouseReleased(MouseEvent e) {  /* Not used */  }
