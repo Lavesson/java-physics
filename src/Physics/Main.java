@@ -1,19 +1,22 @@
 package Physics;
 
-import Rendering.MainWindow;
-
+import Rendering.RenderPanel;
 import javax.swing.*;
 
 public class Main {
+    public static final int WIDTH = 500;
+    public static final int HEIGHT = 500;
+
     public static void main(String[] args) {
-        Physics.PhysicsEngine engine = new Physics.PhysicsEngine();
+        JFrame mainWindow = new JFrame("Simple Physics Demo");
 
-        // Let's assume all units are in centimeters
-        Body ground = new Body(new Rectangle(0, 400, 500, 100));
-        ground.hasGravity = false;
+        // Java Swing initialization crap:
+        mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainWindow.setSize(WIDTH, HEIGHT);
+        mainWindow.setVisible(true);
+        mainWindow.setLocationRelativeTo(null);
 
-        engine.add(ground);
-
-        new MainWindow(engine);
+        RenderPanel renderPanel = new RenderPanel(new PhysicsEngine());
+        mainWindow.add(renderPanel);
     }
 }
