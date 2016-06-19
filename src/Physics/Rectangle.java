@@ -25,4 +25,17 @@ public class Rectangle {
                 cx - width*0.5f, cy - height*0.5f,
                 width, height);
     }
+
+    public static Point getCenter(Rectangle r) {
+        return new Point(
+                r.x + r.width*0.5f,
+                r.y + r.height*0.5f);
+    }
+
+    public static boolean hasOverlap(Rectangle b1Area, Rectangle b2Area) {
+        return b1Area.x < b2Area.x + b2Area.width &&
+               b1Area.x + b1Area.width > b2Area.x &&
+               b1Area.y < b2Area.y + b2Area.height &&
+               b1Area.y + b1Area.height > b2Area.y;
+    }
 }

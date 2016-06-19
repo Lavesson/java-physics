@@ -1,6 +1,6 @@
 package Physics;
 
-// Just a simple data structure
+// Just a simple data structure to represent a physics body
 public class Body {
     public final Rectangle occupiedArea;
     public boolean hasGravity = true;
