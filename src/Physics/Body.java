@@ -4,7 +4,7 @@ package Physics;
 public class Body {
     public final Rectangle occupiedArea;
     public boolean hasGravity = true;
-    public final Vector2D velocity = new Vector2D(0,0);
+    public Vector2D velocity = new Vector2D(0,0);
 
     // We're restricting ourselves to rectangles, but another option would be to
     // pass an interface of a generic shape to the constructor

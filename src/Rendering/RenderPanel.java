@@ -71,10 +71,18 @@ public class RenderPanel extends JPanel implements MouseInputListener {
     }
 
     @Override public void mousePressed(MouseEvent e) {
-        engine.add(new Body(
-                Rectangle.fromCenter(e.getX() / SCALE, e.getY() / SCALE, randomBodyLength(), randomBodyLength())));
+        Body body = new Body(
+                Rectangle.fromCenter(e.getX() / SCALE, e.getY() / SCALE, randomBodyLength(), randomBodyLength()));
+
+        body.velocity = randomVelocityForBody();
+        engine.add(body);
 
         repaint();
+    }
+
+    private Vector2D randomVelocityForBody() {
+        Random r = new Random();
+        return new Vector2D((r.nextFloat()-0.5f)*2.0f, -r.nextFloat()*5.0f);
     }
 
     // Generate a random width and height between 30 and 80

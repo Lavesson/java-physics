@@ -31,7 +31,7 @@ public class PhysicsEngine {
             resolved.add(b);
             if (!b.hasGravity) continue;
 
-            // We'll start by just applying some simple gravity in y
+            // We'll start by just applying some simple gravity in y and update both x and y based on velocity
             updateInstantState(dt, b);
 
             // Next, we'll resolve some collisions between items
@@ -88,5 +88,6 @@ public class PhysicsEngine {
         // Calculate the distance that we've moved in this frame:
         float s = (float) (v0*dt + 0.5f * gravity * dt * dt);
         b.occupiedArea.y += s;
+        b.occupiedArea.x += b.velocity.x*dt;
     }
 }
