@@ -19,7 +19,7 @@ public class LWJGL3Renderer {
     private final String title;
     private InputEventHandler input;
     private long window;
-    private RenderLoop onRenderInstance = null;
+    private UpdateLoop onRenderInstance = null;
     private double lastTime = 0.0;
 
     public LWJGL3Renderer(int width, int height, String title, InputEventHandler input) {
@@ -29,7 +29,7 @@ public class LWJGL3Renderer {
         this.input = input;
     }
 
-    public void onRender(RenderLoop render) {
+    public void onRender(UpdateLoop render) {
         onRenderInstance = render;
     }
 
@@ -54,6 +54,7 @@ public class LWJGL3Renderer {
         return delta;
     }
 
+    // Main render loop, dispatches to an optional update function
     private void loop() {
         GL.createCapabilities();
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -63,11 +64,15 @@ public class LWJGL3Renderer {
                 onRenderInstance.update(calculateTimeDelta());
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+            // TODO: Render crap here
+
             glfwSwapBuffers(window);
             glfwPollEvents();
         }
     }
 
+    // Initialize the renderer
     private void init() {
         GLFWErrorCallback.createPrint(System.err).set();
 

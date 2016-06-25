@@ -1,5 +1,5 @@
 package Rendering;
 
-public interface RenderLoop {
+public interface UpdateLoop {
     void update(double dt);
 }
