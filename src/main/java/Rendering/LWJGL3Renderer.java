@@ -1,6 +1,9 @@
 package Rendering;
 
-import org.lwjgl.*;
+import Input.InputEventHandler;
+import Input.KeyInput;
+import Input.MouseInput;
+
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 
@@ -13,15 +16,22 @@ public class LWJGL3Renderer {
     private final int width;
     private final int height;
     private final String title;
+    private InputEventHandler input;
     private long window;
 
     public LWJGL3Renderer(int width, int height, String title) {
+        this(width, height, title, null);
+    }
+
+    public LWJGL3Renderer(int width, int height, String title, InputEventHandler input) {
         this.width = width;
         this.height = height;
         this.title = title;
+        this.input = input;
+        run();
     }
 
-    public void run() {
+    private void run() {
         try {
             init();
             loop();
@@ -61,10 +71,7 @@ public class LWJGL3Renderer {
         if ( window == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
 
-        glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-            if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
-                glfwSetWindowShouldClose(window, true); // We will detect this in our rendering loop
-        });
+        setupInput();
 
         GLFWVidMode mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
         glfwSetWindowPos(
@@ -76,5 +83,41 @@ public class LWJGL3Renderer {
         glfwMakeContextCurrent(window);
         glfwSwapInterval(1);
         glfwShowWindow(window);
+    }
+
+    private void setupInput() {
+        if (input == null) return;
+
+        glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
+            KeyInput mappedKey = LWJGL3Renderer.mapKeyInput(key);
+            switch (action) {
+                case GLFW_PRESS: input.keyPressed(mappedKey); break;
+                default: input.keyReleased(mappedKey); break;
+            }
+        });
+
+        glfwSetMouseButtonCallback(window, GLFWMouseButtonCallback.create((window, button, action, mods) -> {
+            MouseInput mappedBtn = LWJGL3Renderer.mapMouseInput(button);
+            switch (action) {
+                case GLFW_PRESS: input.mousePressed(mappedBtn); break;
+                default: input.mouseReleased(mappedBtn); break;
+            }
+        }));
+    }
+
+    private static MouseInput mapMouseInput(int button) {
+        switch (button) {
+            case GLFW_MOUSE_BUTTON_LEFT: return MouseInput.LEFT;
+            case GLFW_MOUSE_BUTTON_RIGHT: return MouseInput.RIGHT;
+            case GLFW_MOUSE_BUTTON_MIDDLE: return MouseInput.MIDDLE;
+            default: return MouseInput.UNKNOWN;
+        }
+    }
+
+    private static KeyInput mapKeyInput(int key) {
+        switch (key) {
+            case GLFW_KEY_ESCAPE: return KeyInput.ESCAPE;
+            default: return KeyInput.UNKNOWN;
+        }
     }
 }
