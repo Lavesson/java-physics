@@ -19,12 +19,18 @@ public class LWJGL3Renderer {
     private final String title;
     private InputEventHandler input;
     private long window;
+    private RenderLoop onRenderInstance = null;
+    private double lastTime = 0.0;
 
     public LWJGL3Renderer(int width, int height, String title, InputEventHandler input) {
         this.width = width;
         this.height = height;
         this.title = title;
         this.input = input;
+    }
+
+    public void onRender(RenderLoop render) {
+        onRenderInstance = render;
     }
 
     public void start() {
@@ -40,6 +46,14 @@ public class LWJGL3Renderer {
         }
     }
 
+    // Calculate a time delta (in seconds) between this and the previous frame
+    private double calculateTimeDelta() {
+        double time = glfwGetTime();
+        double delta = time - lastTime;
+        lastTime = time;
+        return delta;
+    }
+
     private void loop() {
         GL.createCapabilities();
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -48,6 +62,9 @@ public class LWJGL3Renderer {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glfwSwapBuffers(window);
             glfwPollEvents();
+
+            if (onRenderInstance != null)
+                onRenderInstance.render(calculateTimeDelta());
         }
     }
 

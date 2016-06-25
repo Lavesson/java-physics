@@ -20,7 +20,12 @@ public class Game implements InputEventHandler {
     public Game() {
         renderer = new LWJGL3Renderer(WIDTH, HEIGHT, "Physics Demo", this);
         physics = new PhysicsEngine();
+        renderer.onRender(this::mainLoop);
         renderer.start();
+    }
+
+    private void mainLoop(double dt) {
+        physics.step(dt);
     }
 
     // Helper method to generate a random velocity
@@ -37,7 +42,6 @@ public class Game implements InputEventHandler {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        System.out.println("Mouse pressed: " + e);
         Body body = new Body(
                 Rectangle.fromCenter(e.posX / SCALE, e.posY / SCALE, randomBodyLength(), randomBodyLength()));
 
@@ -46,18 +50,11 @@ public class Game implements InputEventHandler {
     }
 
     @Override
-    public void mouseReleased(MouseEvent e) {
-        System.out.println("Mouse released: " + e);
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        // NOP
-    }
-
-    @Override
     public void keyReleased(KeyEvent e) {
         if (e.key == KeyInput.ESCAPE)
             renderer.shutdown();
     }
+
+    @Override public void mouseReleased(MouseEvent e) { /* NOP */ }
+    @Override public void keyPressed(KeyEvent e) { /* NOP */ }
 }
