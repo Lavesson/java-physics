@@ -36,7 +36,7 @@ class GLSLShaderProgram implements AutoCloseable {
         glDetachShader(program, vert);
         glDetachShader(program, frag);
 
-        if (glGetShaderi(program, GL_LINK_STATUS) == GL_FALSE) {
+        if (glGetProgrami(program, GL_LINK_STATUS) == GL_FALSE) {
             throw new ShaderException("Could not link shader program", glGetProgramInfoLog(program));
         }
     }

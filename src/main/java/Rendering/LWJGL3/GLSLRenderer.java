@@ -10,9 +10,11 @@ import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.DoubleBuffer;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.lwjgl.glfw.Callbacks.*;
@@ -35,6 +37,7 @@ public class GLSLRenderer implements Renderer {
         this.height = renderSetup.getHeight();
         this.title = renderSetup.getTitle();
         this.input = renderSetup.getInput();
+        init();
     }
 
     @Override
@@ -45,7 +48,6 @@ public class GLSLRenderer implements Renderer {
     @Override
     public void start() {
         try {
-            init();
             loop();
 
             glfwFreeCallbacks(window);
@@ -66,7 +68,6 @@ public class GLSLRenderer implements Renderer {
 
     // Main render loop, dispatches to an optional update function
     private void loop() {
-        GL.createCapabilities();
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
         while ( !glfwWindowShouldClose(window) ) {
@@ -113,6 +114,7 @@ public class GLSLRenderer implements Renderer {
         glfwMakeContextCurrent(window);
         glfwSwapInterval(1);
         glfwShowWindow(window);
+        GL.createCapabilities();
     }
 
     // We're dispatching input to our own set of event classes. Not strictly necessary, but I like the abstraction
@@ -171,12 +173,19 @@ public class GLSLRenderer implements Renderer {
     @Override
     public void useShader(String name) throws ShaderException {
         try {
-            String vertexSource = new String(Files.readAllBytes(Paths.get(String.format("%s.%s", name, ".glsl"))));
-            String fragmentSource = new String(Files.readAllBytes(Paths.get(String.format("%s.%s", name, ".glsl"))));
+            String vertexSource = readSourceFile(String.format("shaders/%s.vert", name));
+            String fragmentSource = readSourceFile(String.format("shaders/%s.frag", name));
             shader = new GLSLShaderProgram(vertexSource, fragmentSource);
-        } catch (IOException e) {
+        }
+        catch (IOException | URISyntaxException e) {
             e.printStackTrace();
             throw new ShaderException("Could not read shader file", e.toString());
         }
+    }
+
+    private String readSourceFile(String relativePath) throws URISyntaxException, IOException {
+        URL resource = getClass().getClassLoader().getResource(relativePath);
+        URI uri = resource.toURI();
+        return new String(Files.readAllBytes(Paths.get(uri)));
     }
 }
