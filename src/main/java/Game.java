@@ -3,7 +3,7 @@ import Input.KeyEvent;
 import Input.KeyInput;
 import Input.MouseEvent;
 import Physics.Body;
-import Physics.PhysicsEngine;
+import Physics.PhysicsWorld;
 import Physics.Rectangle;
 import Physics.Vector2D;
 import Rendering.LWJGL3Renderer;
@@ -15,24 +15,24 @@ public class Game implements InputEventHandler {
     private static final int HEIGHT = 960;
     private static final float SCALE = 100;
     private final LWJGL3Renderer renderer;
-    private final PhysicsEngine physics;
+    private final PhysicsWorld world;
 
     public Game() {
         renderer = new LWJGL3Renderer(WIDTH, HEIGHT, "Physics Demo", this);
-        physics = new PhysicsEngine();
+        world = new PhysicsWorld();
         renderer.onRender(this::mainLoop);
         renderer.start();
 
-        // Add a ground box to the physics engine
+        // Add a ground box to the world
         Body ground = new Body(
                 new Rectangle(0.0f / SCALE, 760.0f / SCALE, 1280.0f / SCALE, 200.0f / SCALE));
 
         ground.hasGravity = false;
-        physics.add(ground);
+        world.add(ground);
     }
 
     private void mainLoop(double dt) {
-        physics.step(dt);
+        world.step(dt);
     }
 
     // Helper method to generate a random velocity
@@ -53,7 +53,7 @@ public class Game implements InputEventHandler {
                 Rectangle.fromCenter(e.posX / SCALE, e.posY / SCALE, randomBodyLength(), randomBodyLength()));
 
         body.velocity = randomVelocityForBody();
-        physics.add(body);
+        world.add(body);
     }
 
     @Override
