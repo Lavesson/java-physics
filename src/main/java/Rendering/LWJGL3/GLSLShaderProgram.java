@@ -1,4 +1,6 @@
-package Rendering.Shading;
+package Rendering.LWJGL3;
+
+import Rendering.Common.ShaderException;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;

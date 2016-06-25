@@ -1,7 +1,9 @@
-package Rendering;
+package Rendering.LWJGL3;
 
 import Input.*;
 
+import Rendering.Common.Renderer;
+import Rendering.Common.UpdateLoop;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -13,7 +15,7 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
-public class LWJGL3Renderer {
+public class GLSLRenderer implements Renderer {
     private final int width;
     private final int height;
     private final String title;
@@ -22,17 +24,19 @@ public class LWJGL3Renderer {
     private UpdateLoop onRenderInstance = null;
     private double lastTime = 0.0;
 
-    public LWJGL3Renderer(int width, int height, String title, InputEventHandler input) {
+    public GLSLRenderer(int width, int height, String title, InputEventHandler input) {
         this.width = width;
         this.height = height;
         this.title = title;
         this.input = input;
     }
 
+    @Override
     public void onRender(UpdateLoop render) {
         onRenderInstance = render;
     }
 
+    @Override
     public void start() {
         try {
             init();
@@ -110,7 +114,7 @@ public class LWJGL3Renderer {
 
         glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
             // ... Create a key event
-            KeyEvent evt = new KeyEvent(LWJGL3Renderer.mapKeyInput(key));
+            KeyEvent evt = new KeyEvent(GLSLRenderer.mapKeyInput(key));
 
             // ... and pass it on to the correct callback
             switch (action) {
@@ -125,7 +129,7 @@ public class LWJGL3Renderer {
             DoubleBuffer bufferY = BufferUtils.createDoubleBuffer(1);
             glfwGetCursorPos(window, bufferX, bufferY);
             MouseEvent evt = new MouseEvent(
-                    LWJGL3Renderer.mapMouseInput(button), (float)bufferX.get(), (float)bufferY.get());
+                    GLSLRenderer.mapMouseInput(button), (float)bufferX.get(), (float)bufferY.get());
 
             // ... and pass it on to the correct callback
             switch (action) {
@@ -151,6 +155,7 @@ public class LWJGL3Renderer {
         }
     }
 
+    @Override
     public void shutdown() {
         glfwSetWindowShouldClose(window, true);
     }

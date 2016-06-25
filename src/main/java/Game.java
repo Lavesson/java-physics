@@ -6,7 +6,8 @@ import Physics.Body;
 import Physics.PhysicsWorld;
 import Physics.Rectangle;
 import Physics.Vector2D;
-import Rendering.LWJGL3Renderer;
+import Rendering.Common.Renderer;
+import Rendering.LWJGL3.GLSLRenderer;
 
 import java.util.Random;
 
@@ -14,11 +15,11 @@ public class Game implements InputEventHandler {
     private static final int WIDTH = 1280;
     private static final int HEIGHT = 960;
     private static final float SCALE = 100;
-    private final LWJGL3Renderer renderer;
+    private final Renderer renderer;
     private final PhysicsWorld world;
 
     public Game() {
-        renderer = new LWJGL3Renderer(WIDTH, HEIGHT, "Physics Demo", this);
+        renderer = new GLSLRenderer(WIDTH, HEIGHT, "Physics Demo", this);
         world = new PhysicsWorld();
         renderer.onRender(this::mainLoop);
         renderer.start();
