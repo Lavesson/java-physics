@@ -59,12 +59,12 @@ public class LWJGL3Renderer {
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
         while ( !glfwWindowShouldClose(window) ) {
+            if (onRenderInstance != null)
+                onRenderInstance.update(calculateTimeDelta());
+
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glfwSwapBuffers(window);
             glfwPollEvents();
-
-            if (onRenderInstance != null)
-                onRenderInstance.render(calculateTimeDelta());
         }
     }
 

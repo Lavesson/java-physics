@@ -31,6 +31,8 @@ public class Game implements InputEventHandler {
         world.add(ground);
     }
 
+    // Whenever a frame has been rendered, we'll end up in the main loop with the elapsed time (in seconds)
+    // since the last frame
     private void mainLoop(double dt) {
         world.step(dt);
     }
