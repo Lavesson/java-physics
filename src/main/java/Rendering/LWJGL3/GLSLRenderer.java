@@ -50,6 +50,9 @@ public class GLSLRenderer implements Renderer {
         try {
             loop();
 
+            if (shader != null)
+                shader.destroy();
+
             glfwFreeCallbacks(window);
             glfwDestroyWindow(window);
         } finally {
@@ -176,6 +179,7 @@ public class GLSLRenderer implements Renderer {
             String vertexSource = readSourceFile(String.format("shaders/%s.vert", name));
             String fragmentSource = readSourceFile(String.format("shaders/%s.frag", name));
             shader = new GLSLShaderProgram(vertexSource, fragmentSource);
+            shader.bind();
         }
         catch (IOException | URISyntaxException e) {
             e.printStackTrace();
@@ -185,6 +189,7 @@ public class GLSLRenderer implements Renderer {
 
     private String readSourceFile(String relativePath) throws URISyntaxException, IOException {
         URL resource = getClass().getClassLoader().getResource(relativePath);
+        assert resource != null;
         URI uri = resource.toURI();
         return new String(Files.readAllBytes(Paths.get(uri)));
     }

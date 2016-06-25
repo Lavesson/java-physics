@@ -25,6 +25,7 @@ public class Game implements InputEventHandler {
         RenderConfiguration config = new RenderConfiguration(WIDTH, HEIGHT, "Physics Demo", this);
         renderer = RenderFactory.createSubSystem(config, "LWJGL3");
 
+        // Tell the renderer to use our shader (simpleShader)
         try {
             assert renderer != null;
             renderer.useShader("simpleShader");
@@ -34,14 +35,14 @@ public class Game implements InputEventHandler {
 
         world = new PhysicsWorld();
         renderer.onRender(this::mainLoop);
-        renderer.start();
 
         // Add a ground box to the world
         Body ground = new Body(
                 new Rectangle(0.0f / SCALE, 760.0f / SCALE, 1280.0f / SCALE, 200.0f / SCALE));
-
         ground.hasGravity = false;
         world.add(ground);
+
+        renderer.start();
     }
 
     // Whenever a frame has been rendered, we'll end up in the main loop with the elapsed time (in seconds)

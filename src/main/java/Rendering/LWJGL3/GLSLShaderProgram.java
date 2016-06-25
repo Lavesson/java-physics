@@ -7,7 +7,7 @@ import static org.lwjgl.opengl.GL20.*;
 
 // Note that the LWJGL3 package is pretty much an aggregate. The only thing that isn't package-local is
 // the renderer itself
-class GLSLShaderProgram implements AutoCloseable {
+class GLSLShaderProgram {
     private final int program;
 
     public GLSLShaderProgram(String vertexSource, String fragmentSource) throws ShaderException {
@@ -53,8 +53,7 @@ class GLSLShaderProgram implements AutoCloseable {
         return shader;
     }
 
-    @Override
-    public void close() throws Exception {
+    public void destroy() {
         // Delete the program when closing
         glDeleteProgram(program);
     }
