@@ -1,8 +1,6 @@
-package Physics;
-
+import Physics.PhysicsEngine;
 import Rendering.RenderPanel;
 import javax.swing.*;
-import java.awt.image.BufferStrategy;
 
 public class Main {
     public static final int WIDTH = 1280;

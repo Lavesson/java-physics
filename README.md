@@ -19,3 +19,11 @@ use it in other software. Released under the MIT license.
 
 You're welcome to submit PR's, but I'll most likely not continue working
 on this :)
+
+### How do I run it?
+
+Assuming you have Gradle installed:
+
+        gradle run
+
+And that should pretty much do it.
