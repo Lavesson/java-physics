@@ -28,10 +28,9 @@ public class LWJGL3Renderer {
         this.height = height;
         this.title = title;
         this.input = input;
-        run();
     }
 
-    private void run() {
+    public void start() {
         try {
             init();
             loop();
@@ -119,5 +118,9 @@ public class LWJGL3Renderer {
             case GLFW_KEY_ESCAPE: return KeyInput.ESCAPE;
             default: return KeyInput.UNKNOWN;
         }
+    }
+
+    public void shutdown() {
+        glfwSetWindowShouldClose(window, true);
     }
 }

@@ -10,6 +10,7 @@ public class Game implements InputEventHandler {
 
     public Game() {
         renderer = new LWJGL3Renderer(WIDTH, HEIGHT, "Physics Demo", this);
+        renderer.start();
     }
 
     @Override
@@ -25,11 +26,11 @@ public class Game implements InputEventHandler {
     @Override
     public void keyPressed(KeyInput input) {
         System.out.println("Key pressed: " + input);
-
     }
 
     @Override
     public void keyReleased(KeyInput input) {
-        System.out.println("Key released: " + input);
+        if (input == KeyInput.ESCAPE)
+            renderer.shutdown();
     }
 }
