@@ -1,13 +1,12 @@
-package Rendering.Shader;
-import com.sun.media.jfxmediaimpl.MediaDisposer;
+package Rendering.Shading;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 
-public class ShaderProgram implements AutoCloseable {
+public class GLSLShaderProgram implements AutoCloseable {
     private final int program;
 
-    public ShaderProgram(String vertexSource, String fragmentSource) throws ShaderException {
+    public GLSLShaderProgram(String vertexSource, String fragmentSource) throws ShaderException {
         // Create a new shader program
         program = glCreateProgram();
 

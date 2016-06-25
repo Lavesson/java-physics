@@ -1,4 +1,4 @@
-package Rendering.Shader;
+package Rendering.Shading;
 
 public class ShaderException extends Throwable {
     public final String message;
