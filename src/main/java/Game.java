@@ -22,6 +22,13 @@ public class Game implements InputEventHandler {
         physics = new PhysicsEngine();
         renderer.onRender(this::mainLoop);
         renderer.start();
+
+        // Add a ground box to the physics engine
+        Body ground = new Body(
+                new Rectangle(0.0f / SCALE, 760.0f / SCALE, 1280.0f / SCALE, 200.0f / SCALE));
+
+        ground.hasGravity = false;
+        physics.add(ground);
     }
 
     private void mainLoop(double dt) {
