@@ -5,6 +5,6 @@ public class Main {
     public static final int HEIGHT = 960;
 
     public static void main(String[] args) {
-        new LWJGL3Renderer(WIDTH, HEIGHT).run();
+        new LWJGL3Renderer(WIDTH, HEIGHT, "Physics Demo").run();
     }
 }

@@ -12,11 +12,13 @@ import static org.lwjgl.system.MemoryUtil.*;
 public class LWJGL3Renderer {
     private final int width;
     private final int height;
+    private final String title;
     private long window;
 
-    public LWJGL3Renderer(int width, int height) {
+    public LWJGL3Renderer(int width, int height, String title) {
         this.width = width;
         this.height = height;
+        this.title = title;
     }
 
     public void run() {
@@ -54,7 +56,7 @@ public class LWJGL3Renderer {
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
-        window = glfwCreateWindow(width, height, "Physics Demo", NULL, NULL);
+        window = glfwCreateWindow(width, height, title, NULL, NULL);
 
         if ( window == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
