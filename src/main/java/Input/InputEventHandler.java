@@ -1,8 +1,8 @@
 package Input;
 
 public interface InputEventHandler {
-    void mousePressed(MouseInput input);
-    void mouseReleased(MouseInput input);
-    void keyPressed(KeyInput input);
-    void keyReleased(KeyInput input);
+    void mousePressed(MouseEvent e);
+    void mouseReleased(MouseEvent e);
+    void keyPressed(KeyEvent e);
+    void keyReleased(KeyEvent e);
 }

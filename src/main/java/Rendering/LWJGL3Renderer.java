@@ -1,11 +1,12 @@
 package Rendering;
 
-import Input.InputEventHandler;
-import Input.KeyInput;
-import Input.MouseInput;
+import Input.*;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
+
+import java.nio.DoubleBuffer;
 
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
@@ -18,10 +19,6 @@ public class LWJGL3Renderer {
     private final String title;
     private InputEventHandler input;
     private long window;
-
-    public LWJGL3Renderer(int width, int height, String title) {
-        this(width, height, title, null);
-    }
 
     public LWJGL3Renderer(int width, int height, String title, InputEventHandler input) {
         this.width = width;
@@ -84,22 +81,34 @@ public class LWJGL3Renderer {
         glfwShowWindow(window);
     }
 
+    // We're dispatching input to our own set of event classes. Not strictly necessary, but I like the abstraction
+    // since it allows us to switch input systems further down the road if necessary
     private void setupInput() {
         if (input == null) return;
 
         glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-            KeyInput mappedKey = LWJGL3Renderer.mapKeyInput(key);
+            // ... Create a key event
+            KeyEvent evt = new KeyEvent(LWJGL3Renderer.mapKeyInput(key));
+
+            // ... and pass it on to the correct callback
             switch (action) {
-                case GLFW_PRESS: input.keyPressed(mappedKey); break;
-                default: input.keyReleased(mappedKey); break;
+                case GLFW_PRESS: input.keyPressed(evt); break;
+                default: input.keyReleased(evt); break;
             }
         });
 
         glfwSetMouseButtonCallback(window, GLFWMouseButtonCallback.create((window, button, action, mods) -> {
-            MouseInput mappedBtn = LWJGL3Renderer.mapMouseInput(button);
+            // ... Create a mouse event
+            DoubleBuffer bufferX = BufferUtils.createDoubleBuffer(1);
+            DoubleBuffer bufferY = BufferUtils.createDoubleBuffer(1);
+            glfwGetCursorPos(window, bufferX, bufferY);
+            MouseEvent evt = new MouseEvent(
+                    LWJGL3Renderer.mapMouseInput(button), (float)bufferX.get(), (float)bufferY.get());
+
+            // ... and pass it on to the correct callback
             switch (action) {
-                case GLFW_PRESS: input.mousePressed(mappedBtn); break;
-                default: input.mouseReleased(mappedBtn); break;
+                case GLFW_PRESS: this.input.mousePressed(evt); break;
+                default: this.input.mouseReleased(evt); break;
             }
         }));
     }
