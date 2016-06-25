@@ -5,7 +5,9 @@ import Rendering.Common.ShaderException;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 
-public class GLSLShaderProgram implements AutoCloseable {
+// Note that the LWJGL3 package is pretty much an aggregate. The only thing that isn't package-local is
+// the renderer itself
+class GLSLShaderProgram implements AutoCloseable {
     private final int program;
 
     public GLSLShaderProgram(String vertexSource, String fragmentSource) throws ShaderException {

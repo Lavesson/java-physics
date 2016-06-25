@@ -3,12 +3,17 @@ package Rendering.LWJGL3;
 import Input.*;
 
 import Rendering.Common.Renderer;
+import Rendering.Common.ShaderException;
 import Rendering.Common.UpdateLoop;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 
+import java.io.IOException;
 import java.nio.DoubleBuffer;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
@@ -23,12 +28,13 @@ public class GLSLRenderer implements Renderer {
     private long window;
     private UpdateLoop onRenderInstance = null;
     private double lastTime = 0.0;
+    private GLSLShaderProgram shader;
 
-    public GLSLRenderer(int width, int height, String title, InputEventHandler input) {
-        this.width = width;
-        this.height = height;
-        this.title = title;
-        this.input = input;
+    public GLSLRenderer(RenderConfiguration renderSetup) {
+        this.width = renderSetup.getWidth();
+        this.height = renderSetup.getHeight();
+        this.title = renderSetup.getTitle();
+        this.input = renderSetup.getInput();
     }
 
     @Override
@@ -69,7 +75,9 @@ public class GLSLRenderer implements Renderer {
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            // TODO: Render crap here
+            if (shader != null) {
+                // TODO: Render crap here
+            }
 
             glfwSwapBuffers(window);
             glfwPollEvents();
@@ -158,5 +166,17 @@ public class GLSLRenderer implements Renderer {
     @Override
     public void shutdown() {
         glfwSetWindowShouldClose(window, true);
+    }
+
+    @Override
+    public void useShader(String name) throws ShaderException {
+        try {
+            String vertexSource = new String(Files.readAllBytes(Paths.get(String.format("%s.%s", name, ".glsl"))));
+            String fragmentSource = new String(Files.readAllBytes(Paths.get(String.format("%s.%s", name, ".glsl"))));
+            shader = new GLSLShaderProgram(vertexSource, fragmentSource);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new ShaderException("Could not read shader file", e.toString());
+        }
     }
 }

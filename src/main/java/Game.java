@@ -6,8 +6,11 @@ import Physics.Body;
 import Physics.PhysicsWorld;
 import Physics.Rectangle;
 import Physics.Vector2D;
+import Rendering.Common.RenderFactory;
 import Rendering.Common.Renderer;
+import Rendering.Common.ShaderException;
 import Rendering.LWJGL3.GLSLRenderer;
+import Rendering.LWJGL3.RenderConfiguration;
 
 import java.util.Random;
 
@@ -19,7 +22,16 @@ public class Game implements InputEventHandler {
     private final PhysicsWorld world;
 
     public Game() {
-        renderer = new GLSLRenderer(WIDTH, HEIGHT, "Physics Demo", this);
+        RenderConfiguration config = new RenderConfiguration(WIDTH, HEIGHT, "Physics Demo", this);
+        renderer = RenderFactory.createSubSystem(config, "LWJGL3");
+
+        try {
+            assert renderer != null;
+            renderer.useShader("simpleShader");
+        } catch (ShaderException e) {
+            e.printStackTrace();
+        }
+
         world = new PhysicsWorld();
         renderer.onRender(this::mainLoop);
         renderer.start();
