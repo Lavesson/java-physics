@@ -1,6 +1,7 @@
 package Rendering.LWJGL3;
 
 import Rendering.Common.ShaderException;
+import Rendering.Surface.Box;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
@@ -56,5 +57,9 @@ class GLSLShaderProgram {
     public void destroy() {
         // Delete the program when closing
         glDeleteProgram(program);
+    }
+
+    public Quad createRenderableQuad(Box box) {
+        return new Quad(box, program);
     }
 }

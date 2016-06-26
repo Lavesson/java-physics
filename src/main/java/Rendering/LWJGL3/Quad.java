@@ -1,4 +1,5 @@
 package Rendering.LWJGL3;
+import Math.*;
 import Rendering.Surface.Box;
 import org.lwjgl.BufferUtils;
 
@@ -10,10 +11,13 @@ import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 
 class Quad {
-    private final int vao;      // Vertex array object
-    private final int vbo;      // Vertex buffer object
+    private final int vao;          // Vertex array object
+    private final int vbo;          // Vertex buffer object
+    private final int translation;  // Uniform translation location in shader
+    private Box box;                // High level representation of this quad
 
-    public Quad(Box box) {
+    public Quad(Box box, int shaderProgram) {
+        this.box = box;
         vao = glGenVertexArrays();
         glBindVertexArray(vao);
 
@@ -38,13 +42,22 @@ class Quad {
 
         glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, 0);
         glBindVertexArray(0);
+
+        translation = glGetUniformLocation(shaderProgram, "translate");
+        glUniformMatrix4fv(translation, false, new Matrix4f().getBuffer());
     }
 
     public void render() {
         glBindVertexArray(vao);
         glEnableVertexAttribArray(0);
+
         glDrawArrays(GL_TRIANGLES, 0, 6);
         glDisableVertexAttribArray(0);
         glBindVertexArray(0);
+    }
+
+    public void destroy() {
+        glDeleteVertexArrays(vao);
+        glDeleteBuffers(vbo);
     }
 }

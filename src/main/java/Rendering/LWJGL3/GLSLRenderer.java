@@ -18,7 +18,9 @@ import java.nio.DoubleBuffer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
@@ -34,7 +36,7 @@ public class GLSLRenderer implements Renderer {
     private UpdateLoop onRenderInstance = null;
     private double lastTime = 0.0;
     private GLSLShaderProgram shader;
-    private List<Quad> quadList = new ArrayList<>();
+    private Queue<Quad> quadList = new LinkedList<>();
 
     public GLSLRenderer(RenderConfiguration renderSetup) {
         this.width = renderSetup.getWidth();
@@ -176,6 +178,11 @@ public class GLSLRenderer implements Renderer {
 
     @Override
     public void shutdown() {
+        while (!quadList.isEmpty()) {
+            Quad quad = quadList.remove();
+            quad.destroy();
+        }
+
         glfwSetWindowShouldClose(window, true);
     }
 
@@ -195,8 +202,7 @@ public class GLSLRenderer implements Renderer {
 
     @Override
     public void addToRenderList(Box box) {
-        // TODO
-        quadList.add(new Quad(box));
+        quadList.add(shader.createRenderableQuad(box));
     }
 
     private String readSourceFile(String relativePath) throws URISyntaxException, IOException {
