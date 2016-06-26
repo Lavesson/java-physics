@@ -40,8 +40,7 @@ public class Game implements InputEventHandler {
         Body ground = new Body(new Rectangle(0.0f / SCALE, 760.0f / SCALE, 1280.0f / SCALE, 200.0f / SCALE));
         ground.hasGravity = false;
         world.add(ground);
-        Box box = new Box(ground);
-        renderer.addToRenderList(box);
+        renderer.addToRenderList(new Box(ground));
 
         renderer.start();
     }
