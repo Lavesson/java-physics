@@ -1,11 +1,11 @@
-package Rendering.Surface;
+package Rendering.Scene;
 
 import Physics.Body;
 
-public class Box {
+public class Node {
     private Body body;
 
-    public Box(Body body) {
+    public Node(Body body) {
         this.body = body;
     }
 

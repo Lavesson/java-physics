@@ -10,7 +10,7 @@ import Rendering.Common.RenderFactory;
 import Rendering.Common.Renderer;
 import Rendering.Common.ShaderException;
 import Rendering.LWJGL3.RenderConfiguration;
-import Rendering.Surface.Box;
+import Rendering.Scene.Node;
 
 import java.util.Random;
 
@@ -40,7 +40,7 @@ public class Game implements InputEventHandler {
         Body ground = new Body(new Rectangle(0.0f / SCALE, 760.0f / SCALE, 1280.0f / SCALE, 200.0f / SCALE));
         ground.hasGravity = false;
         world.add(ground);
-        renderer.addToRenderList(new Box(ground));
+        renderer.addToRenderList(new Node(ground));
 
         renderer.start();
     }
@@ -68,8 +68,8 @@ public class Game implements InputEventHandler {
         Body body = new Body(
                 Rectangle.fromCenter(e.posX / SCALE, e.posY / SCALE, randomBodyLength(), randomBodyLength()));
 
-        Box box = new Box(body);
-        renderer.addToRenderList(box);
+        Node node = new Node(body);
+        renderer.addToRenderList(node);
 
         body.velocity = randomVelocityForBody();
         world.add(body);

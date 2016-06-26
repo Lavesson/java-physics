@@ -5,7 +5,7 @@ import Input.*;
 import Rendering.Common.Renderer;
 import Rendering.Common.ShaderException;
 import Rendering.Common.UpdateLoop;
-import Rendering.Surface.Box;
+import Rendering.Scene.Node;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -17,9 +17,7 @@ import java.net.URL;
 import java.nio.DoubleBuffer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
 import static org.lwjgl.glfw.Callbacks.*;
@@ -204,8 +202,8 @@ public class GLSLRenderer implements Renderer {
     }
 
     @Override
-    public void addToRenderList(Box box) {
-        quadList.add(shader.createRenderableQuad(box, scale));
+    public void addToRenderList(Node node) {
+        quadList.add(shader.createRenderableQuad(node, scale));
     }
 
     private String readSourceFile(String relativePath) throws URISyntaxException, IOException {

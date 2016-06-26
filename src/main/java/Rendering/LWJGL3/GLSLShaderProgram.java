@@ -2,8 +2,7 @@ package Rendering.LWJGL3;
 
 import Math.*;
 import Rendering.Common.ShaderException;
-import Rendering.Surface.Box;
-import org.lwjgl.opengl.GL11;
+import Rendering.Scene.Node;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
@@ -61,8 +60,8 @@ class GLSLShaderProgram {
         glDeleteProgram(program);
     }
 
-    public Quad createRenderableQuad(Box box, float scale) {
-        return new Quad(box, program, scale);
+    public Quad createRenderableQuad(Node node, float scale) {
+        return new Quad(node, program, scale);
     }
 
     public void setupOrthogonalProjection(float width, float height) {

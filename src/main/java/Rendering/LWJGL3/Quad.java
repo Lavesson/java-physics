@@ -1,6 +1,6 @@
 package Rendering.LWJGL3;
 import Math.*;
-import Rendering.Surface.Box;
+import Rendering.Scene.Node;
 import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;
@@ -16,17 +16,17 @@ class Quad {
     private final int translation;  // Uniform translation location in shader
     private final float initialX;   // Initial placement in X
     private final float initialY;   // Initial placement in Y
-    private Box box;                // High level representation of this quad
+    private Node node;                // High level representation of this quad
     private float scale;
 
-    public Quad(Box box, int shaderProgram, float scale) {
-        this.box = box;
+    public Quad(Node node, int shaderProgram, float scale) {
+        this.node = node;
         this.scale = scale;
         vao = glGenVertexArrays();
         glBindVertexArray(vao);
 
-        initialX = box.x();
-        initialY = box.y();
+        initialX = node.x();
+        initialY = node.y();
 
         /* Note: We're currently drawing by keeping duplicate vertices in memory. In most situations, you'd probably
          * want to use an index buffer. The common thing is to build a vertex buffer with the 4 actual vertices of the
@@ -43,13 +43,13 @@ class Quad {
                 // Triangle #1
                 // Vertices:                                    // Colors (r,g,b,a)
                 initialX, initialY,                             1, 0, 0, 1,                 // Top left
-                box.x(), box.y() + box.height(),                0, 1, 0, 1,                 // Bottom left
-                box.x() + box.width(), box.y() + box.height(),  0, 0, 1, 1f,                // Bottom right
+                node.x(), node.y() + node.height(),                0, 1, 0, 1,                 // Bottom left
+                node.x() + node.width(), node.y() + node.height(),  0, 0, 1, 1f,                // Bottom right
 
                 // Triangle #2
                 initialX, initialY,                             1, 0, 0, 1,                 // Top left
-                box.x() + box.width(), box.y() + box.height(),  0, 0, 1, 1,                 // Bottom right
-                box.x() + box.width(), box.y(),                 1, 0, 1, 1                  // Top right
+                node.x() + node.width(), node.y() + node.height(),  0, 0, 1, 1,                 // Bottom right
+                node.x() + node.width(), node.y(),                 1, 0, 1, 1                  // Top right
         };
 
         FloatBuffer verticesBuffer = BufferUtils.createFloatBuffer(vertices.length);
@@ -84,7 +84,7 @@ class Quad {
         glEnableVertexAttribArray(1);
 
         // Update the translation according to the attached entity
-        Matrix4f t = Matrix4f.translate(box.x() - initialX, box.y() - initialY, 0);
+        Matrix4f t = Matrix4f.translate(node.x() - initialX, node.y() - initialY, 0);
         glUniformMatrix4fv(this.translation, false, t.getBuffer());
 
         glDrawArrays(GL_TRIANGLES, 0, 6);
