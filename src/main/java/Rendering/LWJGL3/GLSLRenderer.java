@@ -193,6 +193,7 @@ public class GLSLRenderer implements Renderer {
             String fragmentSource = readSourceFile(String.format("shaders/%s.frag", name));
             shader = new GLSLShaderProgram(vertexSource, fragmentSource);
             shader.bind();
+            shader.setupOrthogonalProjection(width, height);
         }
         catch (IOException | URISyntaxException e) {
             e.printStackTrace();

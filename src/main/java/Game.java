@@ -17,7 +17,6 @@ import java.util.Random;
 public class Game implements InputEventHandler {
     private static final int WIDTH = 1280;
     private static final int HEIGHT = 960;
-    private static final float SCALE = 100;
     private final Renderer renderer;
     private final PhysicsWorld world;
 
@@ -37,8 +36,7 @@ public class Game implements InputEventHandler {
         renderer.onRender(this::mainLoop);
 
         // Add a ground box to the world
-        Body ground = new Body(
-                new Rectangle(0.0f / SCALE, 760.0f / SCALE, 1280.0f / SCALE, 200.0f / SCALE));
+        Body ground = new Body(new Rectangle(0.0f, 760.0f, 1280.0f, 200.0f));
         ground.hasGravity = false;
         world.add(ground);
         Box box = new Box(ground);
@@ -62,13 +60,13 @@ public class Game implements InputEventHandler {
     // Generate a random width and height between 30 and 80
     private float randomBodyLength() {
         Random r = new Random();
-        return (r.nextInt(51) + 30) / SCALE;
+        return (r.nextInt(51) + 30);
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
         Body body = new Body(
-                Rectangle.fromCenter(e.posX / SCALE, e.posY / SCALE, randomBodyLength(), randomBodyLength()));
+                Rectangle.fromCenter(e.posX, e.posY, randomBodyLength(), randomBodyLength()));
 
         Box box = new Box(body);
         renderer.addToRenderList(box);

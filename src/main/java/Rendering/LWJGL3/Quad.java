@@ -13,7 +13,6 @@ import static org.lwjgl.opengl.GL30.*;
 class Quad {
     private final int vao;          // Vertex array object
     private final int vbo;          // Vertex buffer object
-    private final int translation;  // Uniform translation location in shader
     private Box box;                // High level representation of this quad
 
     public Quad(Box box, int shaderProgram) {
@@ -21,16 +20,17 @@ class Quad {
         vao = glGenVertexArrays();
         glBindVertexArray(vao);
 
+        float width = 50.0f;
         float[] vertices = new float[] {
                 // Triangle #1
-                -0.5f,  0.5f,    // Top left
-                -0.5f, -0.5f,    // Bottom left
-                 0.5f, -0.5f,    // Bottom right
+                box.x(), box.y(),                               // Top left
+                box.x(), box.y() + box.height(),                // Bottom left
+                box.x() + box.width(), box.y() + box.height(),  // Bottom right
 
                 // Triangle #2
-                -0.5f,  0.5f,    // Top left
-                 0.5f, -0.5f,    // Bottom right
-                 0.5f,  0.5f     // Top right
+                box.x(), box.y(),                               // Top left
+                box.x() + box.width(), box.y() + box.height(),  // Bottom right
+                box.x() + box.width(), box.y()                  // Top right
         };
 
         FloatBuffer verticesBuffer = BufferUtils.createFloatBuffer(vertices.length);
@@ -43,7 +43,10 @@ class Quad {
         glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, 0);
         glBindVertexArray(0);
 
-        translation = glGetUniformLocation(shaderProgram, "translate");
+        // Uniform translation location in shader
+        int translation = glGetUniformLocation(shaderProgram, "translation");
+
+        // Set an initial identity matrix
         glUniformMatrix4fv(translation, false, new Matrix4f().getBuffer());
     }
 

@@ -1,7 +1,9 @@
 package Rendering.LWJGL3;
 
+import Math.*;
 import Rendering.Common.ShaderException;
 import Rendering.Surface.Box;
+import org.lwjgl.opengl.GL11;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
@@ -61,5 +63,13 @@ class GLSLShaderProgram {
 
     public Quad createRenderableQuad(Box box) {
         return new Quad(box, program);
+    }
+
+    public void setupOrthogonalProjection(int width, int height) {
+        // Uniform translation location in shader
+        int translation = glGetUniformLocation(program, "projection");
+
+        // Set an initial identity matrix
+        glUniformMatrix4fv(translation, false, new Matrix4f().orthographic(0, width, height, 0, 1, -1).getBuffer());
     }
 }
