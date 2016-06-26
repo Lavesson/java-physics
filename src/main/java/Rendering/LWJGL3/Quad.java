@@ -13,17 +13,23 @@ import static org.lwjgl.opengl.GL30.*;
 class Quad {
     private final int vao;          // Vertex array object
     private final int vbo;          // Vertex buffer object
+    private final int translation;  // Uniform translation location in shader
+    private final float initialX;   // Initial placement in X
+    private final float initialY;   // Initial placement in Y
     private Box box;                // High level representation of this quad
+    private float scale;
 
-    public Quad(Box box, int shaderProgram) {
+    public Quad(Box box, int shaderProgram, float scale) {
         this.box = box;
+        this.scale = scale;
         vao = glGenVertexArrays();
         glBindVertexArray(vao);
 
-        float width = 50.0f;
+        initialX = box.x();
+        initialY = box.y();
         float[] vertices = new float[] {
                 // Triangle #1
-                box.x(), box.y(),                               // Top left
+                initialX, initialY,                               // Top left
                 box.x(), box.y() + box.height(),                // Bottom left
                 box.x() + box.width(), box.y() + box.height(),  // Bottom right
 
@@ -43,16 +49,18 @@ class Quad {
         glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, 0);
         glBindVertexArray(0);
 
-        // Uniform translation location in shader
-        int translation = glGetUniformLocation(shaderProgram, "translation");
-
         // Set an initial identity matrix
+        translation = glGetUniformLocation(shaderProgram, "translation");
         glUniformMatrix4fv(translation, false, new Matrix4f().getBuffer());
     }
 
     public void render() {
         glBindVertexArray(vao);
         glEnableVertexAttribArray(0);
+
+        // Update the translation according to the attached entity
+        Matrix4f t = Matrix4f.translate(box.x() - initialX, box.y() - initialY, 0);
+        glUniformMatrix4fv(this.translation, false, t.getBuffer());
 
         glDrawArrays(GL_TRIANGLES, 0, 6);
         glDisableVertexAttribArray(0);

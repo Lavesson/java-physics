@@ -61,11 +61,11 @@ class GLSLShaderProgram {
         glDeleteProgram(program);
     }
 
-    public Quad createRenderableQuad(Box box) {
-        return new Quad(box, program);
+    public Quad createRenderableQuad(Box box, float scale) {
+        return new Quad(box, program, scale);
     }
 
-    public void setupOrthogonalProjection(int width, int height) {
+    public void setupOrthogonalProjection(float width, float height) {
         // Uniform translation location in shader
         int translation = glGetUniformLocation(program, "projection");
 

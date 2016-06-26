@@ -3,31 +3,17 @@ package Rendering.LWJGL3;
 import Input.InputEventHandler;
 
 public class RenderConfiguration {
-    private final int width;
-    private final int height;
-    private final String title;
-    private final InputEventHandler input;
+    public final int width;
+    public final int height;
+    public final String title;
+    public final float scale;
+    public final InputEventHandler input;
 
-    public RenderConfiguration(int width, int height, String title, InputEventHandler input) {
+    public RenderConfiguration(int width, int height, String title, float scale, InputEventHandler input) {
         this.width = width;
         this.height = height;
         this.title = title;
+        this.scale = scale;
         this.input = input;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public InputEventHandler getInput() {
-        return input;
     }
 }

@@ -31,6 +31,7 @@ public class GLSLRenderer implements Renderer {
     private final int width;
     private final int height;
     private final String title;
+    private final float scale;
     private InputEventHandler input;
     private long window;
     private UpdateLoop onRenderInstance = null;
@@ -39,10 +40,11 @@ public class GLSLRenderer implements Renderer {
     private Queue<Quad> quadList = new LinkedList<>();
 
     public GLSLRenderer(RenderConfiguration renderSetup) {
-        this.width = renderSetup.getWidth();
-        this.height = renderSetup.getHeight();
-        this.title = renderSetup.getTitle();
-        this.input = renderSetup.getInput();
+        this.width = renderSetup.width;
+        this.height = renderSetup.height;
+        this.title = renderSetup.title;
+        this.input = renderSetup.input;
+        this.scale = renderSetup.scale;
         init();
     }
 
@@ -193,7 +195,7 @@ public class GLSLRenderer implements Renderer {
             String fragmentSource = readSourceFile(String.format("shaders/%s.frag", name));
             shader = new GLSLShaderProgram(vertexSource, fragmentSource);
             shader.bind();
-            shader.setupOrthogonalProjection(width, height);
+            shader.setupOrthogonalProjection(width/scale, height/scale);
         }
         catch (IOException | URISyntaxException e) {
             e.printStackTrace();
@@ -203,7 +205,7 @@ public class GLSLRenderer implements Renderer {
 
     @Override
     public void addToRenderList(Box box) {
-        quadList.add(shader.createRenderableQuad(box));
+        quadList.add(shader.createRenderableQuad(box, scale));
     }
 
     private String readSourceFile(String relativePath) throws URISyntaxException, IOException {
