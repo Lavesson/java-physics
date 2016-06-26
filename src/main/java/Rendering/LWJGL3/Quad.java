@@ -17,11 +17,16 @@ class Quad {
         vao = glGenVertexArrays();
         glBindVertexArray(vao);
 
-        float[] vertices = new float[]
-        {
-                +0.0f, +0.8f,    // Top coordinate
-                -0.8f, -0.8f,    // Bottom-left coordinate
-                +0.8f, -0.8f     // Bottom-right coordinate
+        float[] vertices = new float[] {
+                // Triangle #1
+                -0.5f,  0.5f,    // Top left
+                -0.5f, -0.5f,    // Bottom left
+                 0.5f, -0.5f,    // Bottom right
+
+                // Triangle #2
+                -0.5f,  0.5f,    // Top left
+                 0.5f, -0.5f,    // Bottom right
+                 0.5f,  0.5f     // Top right
         };
 
         FloatBuffer verticesBuffer = BufferUtils.createFloatBuffer(vertices.length);
@@ -38,7 +43,7 @@ class Quad {
     public void render() {
         glBindVertexArray(vao);
         glEnableVertexAttribArray(0);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
         glDisableVertexAttribArray(0);
         glBindVertexArray(0);
     }
