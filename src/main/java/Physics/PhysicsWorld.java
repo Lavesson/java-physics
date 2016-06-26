@@ -8,7 +8,7 @@ import java.util.List;
 // to actually draw stuff. It just calculates coordinates in the "world" based on all
 // parameters
 
-public class PhysicsEngine {
+public class PhysicsWorld {
     private List<Body> bodies = new ArrayList<Body>();
     private float gravity = 9.82f;
     private EdgeSeparation edgeSeparation = new EdgeSeparation();
