@@ -5,6 +5,7 @@ import Input.*;
 import Rendering.Common.Renderer;
 import Rendering.Common.ShaderException;
 import Rendering.Common.UpdateLoop;
+import Rendering.Surface.Box;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -16,6 +17,8 @@ import java.net.URL;
 import java.nio.DoubleBuffer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
@@ -31,6 +34,7 @@ public class GLSLRenderer implements Renderer {
     private UpdateLoop onRenderInstance = null;
     private double lastTime = 0.0;
     private GLSLShaderProgram shader;
+    private List<Quad> quadList = new ArrayList<>();
 
     public GLSLRenderer(RenderConfiguration renderSetup) {
         this.width = renderSetup.getWidth();
@@ -80,7 +84,9 @@ public class GLSLRenderer implements Renderer {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             if (shader != null) {
-                // TODO: Render crap here
+                for (Quad quad : quadList) {
+                    quad.render();
+                }
             }
 
             glfwSwapBuffers(window);
@@ -185,6 +191,12 @@ public class GLSLRenderer implements Renderer {
             e.printStackTrace();
             throw new ShaderException("Could not read shader file", e.toString());
         }
+    }
+
+    @Override
+    public void addToRenderList(Box box) {
+        // TODO
+        quadList.add(new Quad(box));
     }
 
     private String readSourceFile(String relativePath) throws URISyntaxException, IOException {

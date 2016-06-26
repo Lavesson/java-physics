@@ -9,8 +9,8 @@ import Physics.Vector2D;
 import Rendering.Common.RenderFactory;
 import Rendering.Common.Renderer;
 import Rendering.Common.ShaderException;
-import Rendering.LWJGL3.GLSLRenderer;
 import Rendering.LWJGL3.RenderConfiguration;
+import Rendering.Surface.Box;
 
 import java.util.Random;
 
@@ -67,6 +67,9 @@ public class Game implements InputEventHandler {
     public void mousePressed(MouseEvent e) {
         Body body = new Body(
                 Rectangle.fromCenter(e.posX / SCALE, e.posY / SCALE, randomBodyLength(), randomBodyLength()));
+
+        Box box = new Box(body);
+        renderer.addToRenderList(box);
 
         body.velocity = randomVelocityForBody();
         world.add(body);
